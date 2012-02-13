@@ -92,7 +92,7 @@ function bugherd_configuration($form_state) {
     '#required' => TRUE,
   );
 
-  $form['bugherd_disbale_on_admin'] = array(
+  $form['bugherd_disable_on_admin'] = array(
     '#type' => 'checkbox',
     '#title' => t('Disable on admin pages'),
     '#default_value' => variable_get('bugherd_disable_on_admin', FALSE),
