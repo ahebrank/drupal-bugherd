@@ -1,0 +1,4 @@
+name = "BugHerd intergation"
+description = 'Adds <a href="http://www.bugherd.com/">BugHerd</a> issue reporting to your site."
+core = 7.x
+config = admin/config/development/bugherd

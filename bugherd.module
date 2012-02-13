@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * @file
+ *   BugHerd module functions.
+ */
+
+/**
+ * Implements hook_init().
+ */
+function bugherd_init() {
+
+  if (!user_access('access bugherd')) {
+    return;
+  }
+
+  $disable_on_admin = variable_get('bugherd_disable_on_admin', FALSE);
+  if (arg(0) == 'admin' && $disable_on_admin) {
+    return;
+  }
+  
+
+  $api_key = variable_get('bugherd_api_key', FALSE);
+  if (!$api_key) {
+    $link = l(t('Configure BugHerd'), 'admin/config/development/bugherd');
+    $error = t('BugHerd API key not set. !configure.',  array('!configure' => $link));
+    drupal_set_message($error, 'error', FALSE);
+    return;
+  }
+
+  $api_key = check_plain($api_key);
+  $script = <<<SCRIPT
+  var _bugHerdAPIKey = '{$api_key}';
+  (function (d, t) {
+    var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
+    bh.type = 'text/javascript';
+    bh.src = '//www.bugherd.com/bugherd.js?';
+    s.parentNode.insertBefore(bh, s);
+  })(document, 'script');
+
+SCRIPT;
+
+  drupal_add_js($script, 'inline');
+}
+
+/**
+ * Implements hook_menu().
+ */
+function bugherd_menu() {
+  $items = array();
+
+  $items['admin/config/development/bugherd'] = array(
+    'title' => 'BugHerd',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('bugherd_configuration'),
+    'access arguments' => array('administer bugherd'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permissions.
+ */
+function bugherd_permission() {
+  $perms = array();
+
+  $perms['administer bugherd'] = array(
+    'title' => t('Administer BugHerd module'),
+    'description' => t('Perform administration tasks for BugHerd.'),
+  );
+
+  $perms['access bugherd'] = array(
+    'title' => t('Access BugHerd'),
+    'description' => t('Log issues via the on page issue submission form.'),
+  );
+
+  return $perms;
+}
+
+function bugherd_configuration($form_state) {
+  $form = array();
+
+  $link = l('http://www.bugherd.com/', 'http://www.bugherd.com/');
+  $description = t('To obtain an API key sign up for BugHerd at !link.', array('!link' => $link));
+  $form['bugherd_api_key'] = array(
+    '#type' => 'textfield',
+    '#title' => t('BugHerd API key'),
+    '#default_value' => variable_get('bugherd_api_key', ''),
+    '#description' => $description,
+    '#size' => 60,
+    '#required' => TRUE,
+  );
+
+  $form['bugherd_disbale_on_admin'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Disable on admin pages'),
+    '#default_value' => variable_get('bugherd_disable_on_admin', FALSE),
+    '#description' => t('Ticking the checkbox will prevent the BugHerd button being available on admin pages'),
+  );
+
+  return system_settings_form($form);
+}
