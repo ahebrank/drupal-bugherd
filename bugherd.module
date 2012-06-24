@@ -18,13 +18,11 @@ function bugherd_init() {
   if (arg(0) == 'admin' && $disable_on_admin) {
     return;
   }
-  
 
   $api_key = variable_get('bugherd_api_key', FALSE);
   if (!$api_key) {
     $link = l(t('Configure BugHerd'), 'admin/config/development/bugherd');
-    $error = t('BugHerd API key not set. !configure.',  array('!configure' => $link));
-    drupal_set_message($error, 'error', FALSE);
+    drupal_set_message(t('BugHerd API key not set. !configure.',  array('!configure' => $link)), 'error', FALSE);
     return;
   }
 
@@ -60,7 +58,7 @@ function bugherd_menu() {
 }
 
 /**
- * Implements hook_permissions.
+ * Implements hook_permissions().
  */
 function bugherd_permission() {
   $perms = array();
