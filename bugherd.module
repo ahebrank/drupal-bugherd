@@ -34,13 +34,13 @@ function bugherd_init() {
   (function (d, t) {
     var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
     bh.type = 'text/javascript';
-    bh.src = '//www.bugherd.com/bugherd.js?';
+    bh.src = '//www.bugherd.com/sidebarv2.js?apikey={$api_key}';
     s.parentNode.insertBefore(bh, s);
   })(document, 'script');
 
 SCRIPT;
 
-  drupal_add_js($script, 'inline');
+  drupal_add_js($script, array('type' => 'inline', 'scope' => 'footer'));
 }
 
 /**
