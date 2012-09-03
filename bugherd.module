@@ -22,7 +22,7 @@ function bugherd_init() {
   $api_key = variable_get('bugherd_api_key', FALSE);
   if (!$api_key) {
     $link = l(t('Configure BugHerd'), 'admin/config/development/bugherd');
-    drupal_set_message(t('BugHerd API key not set. !configure.',  array('!configure' => $link)), 'error', FALSE);
+    drupal_set_message(t('BugHerd API key not set. !configure.',  array('!configure' => $link)), 'warning', FALSE);
     return;
   }
 
