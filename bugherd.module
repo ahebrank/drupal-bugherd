@@ -19,20 +19,20 @@ function bugherd_init() {
     return;
   }
 
-  $api_key = variable_get('bugherd_api_key', FALSE);
-  if (!$api_key) {
+  $key = variable_get('bugherd_project_key');
+  if (!$key) {
     $link = l(t('Configure BugHerd'), 'admin/config/development/bugherd');
-    drupal_set_message(t('BugHerd API key not set. !configure.',  array('!configure' => $link)), 'warning', FALSE);
+    drupal_set_message(t('BugHerd project key not set. !configure.',  array('!configure' => $link)), 'warning', FALSE);
     return;
   }
 
-  $api_key = check_plain($api_key);
+  $key = check_plain($key);
   $script = <<<SCRIPT
-  var _bugHerdAPIKey = '{$api_key}';
+  var _bugHerdAPIKey = '{$key}';
   (function (d, t) {
     var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
     bh.type = 'text/javascript';
-    bh.src = '//www.bugherd.com/sidebarv2.js?apikey={$api_key}';
+    bh.src = '//www.bugherd.com/sidebarv2.js?apikey={$key}';
     s.parentNode.insertBefore(bh, s);
   })(document, 'script');
 
@@ -80,11 +80,11 @@ function bugherd_configuration($form_state) {
   $form = array();
 
   $link = l('http://www.bugherd.com/', 'http://www.bugherd.com/');
-  $description = t('To obtain an API key sign up for BugHerd at !link.', array('!link' => $link));
-  $form['bugherd_api_key'] = array(
+  $description = t('To obtain your project key login or sign up for BugHerd at !link.', array('!link' => $link));
+  $form['bugherd_project_key'] = array(
     '#type' => 'textfield',
-    '#title' => t('BugHerd API key'),
-    '#default_value' => variable_get('bugherd_api_key', ''),
+    '#title' => t('BugHerd Project key'),
+    '#default_value' => variable_get('bugherd_project_key'),
     '#description' => $description,
     '#size' => 60,
     '#required' => TRUE,
