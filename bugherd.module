@@ -15,7 +15,7 @@ function bugherd_init() {
   }
 
   $disable_on_admin = variable_get('bugherd_disable_on_admin', FALSE);
-  if (arg(0) == 'admin' && $disable_on_admin) {
+  if ($disable_on_admin && path_is_admin($_GET['q'])) {
     return;
   }
 
