@@ -21,8 +21,10 @@ function bugherd_init() {
 
   $key = variable_get('bugherd_project_key');
   if (!$key) {
-    $link = l(t('Configure BugHerd'), 'admin/config/development/bugherd');
-    drupal_set_message(t('BugHerd project key not set. !configure.',  array('!configure' => $link)), 'warning', FALSE);
+    if (user_access('administer bugherd')) {
+      $link = l(t('Configure BugHerd'), 'admin/config/development/bugherd');
+      drupal_set_message(t('BugHerd project key not set. !configure.',  array('!configure' => $link)), 'warning', FALSE);
+    }
     return;
   }
 
