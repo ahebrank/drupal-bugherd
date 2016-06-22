@@ -8,7 +8,7 @@
 use Drupal\Component\Utility\SafeMarkup;
 
 /**
- * Implements hook_page_attachments_alter).
+ * Implements hook_page_attachments.
  */
 function bugherd_page_attachments(&$page) {
 
