@@ -28,11 +28,20 @@ class ConfigurationForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return [
+      'bugherd.settings',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
     $config = $this->config('bugherd.settings');
 
     $link = \Drupal::l('https://www.bugherd.com/', Url::fromUri('https://www.bugherd.com/'));
-    $description = t('To obtain an API key sign up for BugHerd at !link.', array('!link' => $link));
+    $description = t('To obtain an API key sign up for BugHerd at @link.', array('@link' => $link));
     $form['api_key'] = array(
       '#type' => 'textfield',
       '#title' => t('BugHerd API key'),

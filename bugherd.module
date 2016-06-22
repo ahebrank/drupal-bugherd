@@ -5,12 +5,12 @@
  *   BugHerd module functions.
  */
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
- * Implements hook_page_build().
+ * Implements hook_page_attachments_alter).
  */
-function bugherd_page_build(&$page) {
+function bugherd_page_attachments(&$page) {
 
   if (!\Drupal::currentUser()->hasPermission('access bugherd'))
     return;
@@ -21,28 +21,13 @@ function bugherd_page_build(&$page) {
   }
 
   $api_key = \Drupal::config('bugherd.settings')->get('api_key', FALSE);
-  if (!$api_key) {
+  if ($api_key === FALSE) {
     $link = \Drupal::l(t('Configure BugHerd'), new \Drupal\Core\Url('bugherd.settings'));
-    drupal_set_message(t('BugHerd API key not set. !configure.',  array('!configure' => $link)), 'warning', FALSE);
+    drupal_set_message(t('BugHerd API key not set. @configure.',  array('@configure' => $link)), 'warning', FALSE);
     return;
   }
 
-  $api_key = String::checkPlain($api_key);
-  $script = <<<SCRIPT
-  var _bugHerdAPIKey = '{$api_key}';
-  (function (d, t) {
-    var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
-    bh.type = 'text/javascript';
-    bh.src = '//www.bugherd.com/sidebarv2.js?apikey={$api_key}';
-    s.parentNode.insertBefore(bh, s);
-  })(document, 'script');
-
-SCRIPT;
-
-  $page['#attached']['js'][] = array(
-    'type' => 'inline',
-    'data' => $script,
-    'scope' => 'footer',
-    'every_page' => TRUE,
-  );
+  $api_key = SafeMarkup::checkPlain($api_key);
+  $page['#attached']['library'][] = 'bugherd/snippet';
+  $page['#attached']['drupalSettings']['bugherd']['snippet']['key'] = $api_key;
 }

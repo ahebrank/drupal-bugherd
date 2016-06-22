@@ -1,0 +1,6 @@
+snippet:
+  version: 1.x
+  js:
+    js/snippet.js: {}
+  dependecies:
+    - core/drupalSettings
