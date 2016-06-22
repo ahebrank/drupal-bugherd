@@ -1,0 +1,7 @@
+bugherd.settings:
+  path: '/admin/config/development/bugherd'
+  defaults:
+    _form: 'Drupal\bugherd\Form\ConfigurationForm'
+    _title: 'BugHerd'
+  requirements:
+    _permission: 'administer bugherd'

@@ -1,0 +1,5 @@
+bugherd.settings:
+  title: 'BugHerd'
+  description: 'Configure BugHerd.'
+  parent: system.admin_config_development
+  route_name: bugherd.settings
